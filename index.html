@@ -1,0 +1,144 @@
+ 
+ <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+   integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+   crossorigin=""/>
+   
+  
+<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+   integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+   crossorigin=""></script>
+   
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.js" charset="utf-8"></script>
+   
+
+  <!--
+  -->
+   
+ <!DOCTYPE html>
+ <html>
+   
+	<head>
+	<style>
+	<!-- rozciaganie na ekranie -->
+	
+	body 
+	{margin: 0;}
+	
+	html, #map 
+	{
+    height: 100%;
+    width: 100%;
+	}
+	
+	</style>
+	<title> Food Map  </title> 
+	<meta charset="UTF-8">
+	<link rel="icon" type="image/ico" href="favicon.ico"/> 
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<link rel="icon" type="image/png" href="food_pin.png">
+  
+	</head>
+
+   
+ <body>
+ <div id="map"> 
+ <script src="js/leaflet.js"></script> 
+ <link rel="stylesheet" href="css/leaflet.css">
+   
+ <script> 
+   // ,{maxZoom:22} po 'map'
+   var mymap = L.map('map').setView([52.21614947735841, 21.02002643154671], 12);
+   
+   var OpenStreetMap = 
+   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', 
+   {foo: 'bar',
+   attribution: '<a href="http://openstreetmap.org/copyright">OpenStreetMap</a> | Kacper Sito 2021'
+   });
+   
+   OpenStreetMap.addTo(mymap);
+   
+   	// NMT
+	var nmt = L.tileLayer.wms('https://mapy.geoportal.gov.pl/wss/service/PZGIK/NMT/GRID1/WMS/ShadedRelief', {
+		//subdomains: ['integracja01','integracja02'],
+		layers: 'Raster',
+		format: 'image/png',
+		transparent: 'true',
+		attribution: 'GUGiK'
+		});
+   
+	var locations = [
+	
+	["EFE DOENER KEBAB",52.234563, 21.033659],
+	["Ezber Kebab",52.161396101617086, 21.082078567025803],
+	["Fenicja Kebab",52.147206540384, 21.043189385181744],
+	["Minar Kebab",52.235915, 21.031914],
+	["Alibaba. Bar Turecki",52.23578662841924, 21.008654316702714],
+	["Dara",50.03766199813105, 22.0053646067911], 
+	["Zahir Kebab",52.23069384278927, 20.975264402290513], 
+	["Sapko Kebab",52.24307036869301, 20.993068287231566],
+	["Efes Kebab",52.23167434344252, 21.055497129254576],
+	["Gdzieś tutaj w BUD",47.495664740749845, 19.065810320790764]
+
+	];
+  
+	
+	for (var i = 0; i<locations.length; i++){
+	marker = new L.marker([locations[i][1], locations[i][2]])
+	.bindPopup(locations[i][0])
+	.addTo(mymap);
+	}
+	
+	
+	// kas locations
+	
+	var greenIcon = new L.Icon({
+	  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+	  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+	  iconSize: [25, 41],
+	  iconAnchor: [12, 41],
+	  popupAnchor: [1, -34],
+	  shadowSize: [41, 41]
+	});
+	
+	
+	var locations_kas = [
+	
+	["NaN",52.220071506356916, 21.01293237883069],
+	["Dubai",52.22042409299132, 21.012038360784057],
+	["Amman Kebab",52.2201989155447, 21.012731707260524] 
+	];
+	
+	
+	for (var i = 0; i<locations_kas.length; i++){
+	marker_kas = new L.marker([locations_kas[i][1], locations_kas[i][2]], {icon: greenIcon})
+	.bindPopup(locations_kas[i][0])
+	.addTo(mymapNO);
+	}
+
+	L.control.scale().addTo(mymap);
+
+
+	var layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+	mymap.addLayer(layer);    
+
+	var attrOptions = {
+	prefix: 'Kacper Sito | '
+	};
+
+	var baseLayers = { 
+		"OpenStreetMap": OpenStreetMap,
+		"Numeryczny Model Terenu": nmt
+		}; 
+
+	L.control.layers(baseLayers).addTo(mymap);
+
+
+	// przycisk do lokalizacji
+	L.control.locate().addTo(mymap);
+   
+</script> 
+</body> 
+</html>
+   
